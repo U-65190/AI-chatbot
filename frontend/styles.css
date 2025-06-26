@@ -102,3 +102,53 @@ input[type="file"] {
 h3 {
     color: #00ffcc;
 }
+
+#showChatsBtn {
+    background-color: #222e2e;
+    color: #00ffcc;
+    border: 1px solid #00ffcc;
+    border-radius: 5px;
+    padding: 10px 18px;
+    font-size: 1em;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    box-shadow: 0 0 8px #00ffcc55;
+    transition: background 0.2s, color 0.2s;
+}
+
+#showChatsBtn:hover {
+    background-color: #00ffcc;
+    color: #222e2e;
+}
+
+#chatDropdown {
+    margin-bottom: 15px;
+    margin-top: 5px;
+    background: #23233a;
+    border: 1px solid #00ffcc44;
+    border-radius: 8px;
+    padding: 10px 15px;
+    box-shadow: 0 0 8px #00ffcc33;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+}
+
+#chatSelect {
+    background: #1e1e2f;
+    color: #00ffcc;
+    border: 1px solid #00ffcc;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 1em;
+    margin-left: 0;
+    margin-right: 10px;
+    outline: none;
+    box-shadow: 0 0 6px #00ffcc22;
+    transition: border 0.2s;
+}
+
+#chatSelect:focus {
+    border: 1.5px solid #00ffcc;
+    box-shadow: 0 0 10px #00ffcc55;
+}

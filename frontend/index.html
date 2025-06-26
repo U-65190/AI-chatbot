@@ -18,6 +18,13 @@
 <body>
     <h2>AI-Powered Chatbot</h2>
 
+    <button id="showChatsBtn" onclick="toggleChatDropdown()">Show Previous Chats</button>
+    <div id="chatDropdown" style="display:none;">
+        <select id="chatSelect" onchange="loadSelectedChat()">
+            <option value="">Select a chat...</option>
+        </select>
+    </div>
+
     <div id="chat-box"></div>
 
     <input type="text" id="message" placeholder="Type a message..." />

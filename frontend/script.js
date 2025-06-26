@@ -1,4 +1,16 @@
-const API_URL = "http://localhost:8000/chat"; // Adjust the URL if needed (your FastAPI backend URL)
+let currentSessionId = null;
+
+window.onload = async function() {
+    await startNewSession();
+};
+
+async function startNewSession() {
+    const res = await fetch("http://localhost:8000/new-session", { method: "POST" }); // Adjust the URL if needed (your FastAPI backend URL)
+    if (res.ok) {
+        const data = await res.json();
+        currentSessionId = data.session_id;
+    }
+}
 
 async function appendMessage(role, text) {
     const chatBox = document.getElementById("chat-box");
@@ -7,6 +19,47 @@ async function appendMessage(role, text) {
     message.innerText = text;
     chatBox.appendChild(message);
     chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function toggleChatDropdown() {
+    const dropdown = document.getElementById("chatDropdown");
+    dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
+    if (dropdown.style.display === "block") {
+        fetchChatSessions();
+    }
+}
+
+async function fetchChatSessions() {
+    // Replace with your backend endpoint for chat sessions
+    const res = await fetch("http://localhost:8000/chat-sessions");
+    if (res.ok) {
+        const data = await res.json();
+        const chatSelect = document.getElementById("chatSelect");
+        chatSelect.innerHTML = '<option value="">Select a chat...</option>';
+        data.sessions.forEach(session => {
+            // session.gyst is a short summary, session.id is the session identifier
+            const option = document.createElement("option");
+            option.value = session.id;
+            option.text = session.gyst;
+            chatSelect.appendChild(option);
+        });
+    }
+}
+
+async function loadSelectedChat() {
+    const chatSelect = document.getElementById("chatSelect");
+    const sessionId = chatSelect.value;
+    if (!sessionId) return;
+    currentSessionId = sessionId; // <-- update current session
+    const res = await fetch(`http://localhost:8000/chat-session/${sessionId}`);
+    if (res.ok) {
+        const data = await res.json();
+        const chatBox = document.getElementById("chat-box");
+        chatBox.innerHTML = "";
+        data.history.forEach(msg => {
+            appendMessage(msg.role === "model" ? "bot" : "user", msg.text);
+        });
+    }
 }
 
 async function sendMessage() {
@@ -19,7 +72,7 @@ async function sendMessage() {
     messageInput.value = ""; // Clear input after sending message
 
     // Send the message to your FastAPI backend
-    const res = await fetch(API_URL, {
+    const res = await fetch(`http://localhost:8000/chat/${currentSessionId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMessage }), // Sending a message object
